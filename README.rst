@@ -1,7 +1,6 @@
 ipgetter2
 =========
 
-
 .. image:: https://img.shields.io/pypi/v/ipgetter2.svg
     :target: https://pypi.python.org/pypi/ipgetter2
 
@@ -13,7 +12,13 @@ ipgetter2
 
 Utility to fetch your external IP address.
 
-This library is try to act as a replacement of the **ipgetter** library, because that library has disappeared on pypi.org and github.
+This module is designed to fetch your external IP address from the internet.
+
+It is used mostly when behind a NAT.
+
+It picks your IP randomly from a server list to minimize request overhead on a single server
+
+NOTICE: This library is try to act as a replacement of the **ipgetter** library, because that library has disappeared on pypi.org and github.
 
 * License: Apache-2.0
 * Documentation: https://ipgetter2.readthedocs.io.
@@ -24,6 +29,20 @@ Why there another ipgetter library?
 I found ipgetter disappeared at night of 2019-05-11. I don't know precisely when it's disappeared, and don't know what's going on.
 
 So I write this library with same API interface for my projects that depends on it as a replacement, hope it will help people that ran into  the same situation.
+
+Usage
+---------
+
+::
+
+    >>> import ipgetter
+    >>> myip = ipgetter.myip()
+    >>> myip
+    '8.8.8.8'
+    >>> ipgetter.IPgetter().test()
+    Number of servers: 47
+    IP's :
+    8.8.8.8 = 47 ocurrencies
 
 Credits
 ---------
