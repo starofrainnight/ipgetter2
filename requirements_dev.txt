@@ -1,0 +1,13 @@
+pip
+bumpversion
+wheel
+watchdog
+flake8
+coverage
+Sphinx
+cryptography
+PyYAML
+pytest
+pytest-runner
+click
+pre-commit
