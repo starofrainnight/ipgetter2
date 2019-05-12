@@ -32,7 +32,7 @@ def timeout(seconds, error_message="Function call timed out"):
 @timeout(120)
 def myip():
     """Get your external IP"""
-    return "127.0.0.1"
+    return IPgetter().get_externalip()
 
 
 class IPgetter(object):
