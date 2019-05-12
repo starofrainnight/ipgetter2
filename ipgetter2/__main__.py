@@ -4,16 +4,14 @@
 """Console script for ipgetter2."""
 
 import click
+from .ipgetter1 import myip, IPgetter
 
 
 @click.command()
-def main(args=None):
+def main():
     """Console script for ipgetter2."""
-    click.echo(
-        "Replace this message by putting your code into "
-        "ipgetter2.__main__.main"
-    )
-    click.echo("See click documentation at http://click.pocoo.org/")
+
+    click.echo(myip())
 
 
 if __name__ == "__main__":
