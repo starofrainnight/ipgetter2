@@ -12,6 +12,7 @@ from ipaddress import ip_address, IPv4Address, IPv6Address, AddressValueError
 from typing import List
 from .exceptions import AddressNotFoundError
 
+# Default Servers' URL
 DEFAULT_URLS = [
     "http://ip.dnsexit.com",
     "http://ifconfig.me/ip",
@@ -129,6 +130,11 @@ class IPAddress(object):
 
 class IPGetter(object):
     def __init__(self, urls: List[str] = DEFAULT_URLS):
+        """Initialize the IPGetter object with specific server urls
+
+        :param urls: Servers' url that provided ability to get an external IP,
+            defaults to DEFAULT_URLS
+        """
         self._urls = urls
         self._timeout = 30
 
