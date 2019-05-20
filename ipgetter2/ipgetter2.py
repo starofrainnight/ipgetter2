@@ -7,6 +7,7 @@ import chardet
 import requests
 import unicodedata
 import random
+from requests.exceptions import ReadTimeout
 from ipaddress import ip_address, IPv4Address, IPv6Address, AddressValueError
 from typing import List
 
@@ -221,7 +222,7 @@ class IPGetter(object):
         for url in urls:
             try:
                 address = self.get_from(url)
-            except (AddressNotFoundError, ConnectionError) as e:
+            except (AddressNotFoundError, ConnectionError, ReadTimeout) as e:
                 addresses.append((None, url, e))
                 continue
 
