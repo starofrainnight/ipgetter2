@@ -4,7 +4,7 @@
 """Console script for ipgetter2."""
 
 import click
-from .ipgetter2 import IPGetter, IPAddress
+from .ipgetter2 import IPGetter, IPAddresses
 
 
 @click.command()

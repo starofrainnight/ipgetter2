@@ -39,13 +39,8 @@ class AddressNotFoundError(ValueError):
         super().__init__(*args, **kwargs)
 
 
-class IPAddress(object):
-    """IPAddress use for indicate a
-
-    :param object: [description]
-    :type object: [type]
-    :return: [description]
-    :rtype: [type]
+class IPAddresses(object):
+    """Use for store our outer v4 and v6 addresses
     """
 
     DEFAULT_IPV4_ADDRESS = IPv4Address("0.0.0.0")
@@ -143,7 +138,7 @@ class IPGetter(object):
                 "Not found any valid IP address at server : %s" % url
             )
 
-        return IPAddress(v4, v6)
+        return IPAddresses(v4, v6)
 
     def test(self):
         """abc"""
