@@ -4,6 +4,7 @@
 
 import signal
 from functools import wraps
+from . import ipgetter2
 
 
 def timeout(seconds, error_message="Function call timed out"):
@@ -46,18 +47,18 @@ class IPgetter(object):
     """
 
     def __init__(self):
-        self.server_list = []
+        self.server_list = ipgetter2.DEFAULT_URLS
+        self._getter = ipgetter2.IPGetter()
 
     def get_externalip(self):
         """This function gets your IP from a random server
         """
-
-        return "127.0.0.1"
+        return self._getter.get().v4
 
     def fetch(self, server):
         """This function gets your IP from a specific server
         """
-        return "127.0.0.1"
+        return self._getter.get_from(server).v4
 
     def test(self):
         """This functions tests the consistency of the servers
@@ -65,4 +66,23 @@ class IPgetter(object):
         All results should be the same.
         """
 
-        pass
+        resultdict = {}
+        for server in self.server_list:
+            resultdict.update(**{server: self.fetch(server)})
+
+        ips = sorted(resultdict.values())
+        ips_set = set(ips)
+        print("\nNumber of servers: {}".format(len(self.server_list)))
+        print("IP's :")
+        for ip, ocorrencia in zip(
+            ips_set, map(lambda x: ips.count(x), ips_set)
+        ):
+        print(
+            "{0} = {1} ocurrenc{2}".format(
+                ip if len(ip) > 0 else "broken server",
+                ocorrencia,
+                "y" if ocorrencia == 1 else "ies",
+            )
+        )
+        print("\n")
+        print(resultdict)
