@@ -6,11 +6,59 @@ import re
 import chardet
 import requests
 import unicodedata
+import random
 from ipaddress import ip_address, IPv4Address, IPv6Address, AddressValueError
 from typing import List
 
-
-DEFAULT_URLS = ["http://checkip.dyndns.com/"]
+DEFAULT_URLS = [
+    "http://ip.dnsexit.com",
+    "http://ifconfig.me/ip",
+    "http://ipecho.net/plain",
+    "http://checkip.dyndns.org/plain",
+    "http://ipogre.com/linux.php",
+    "http://whatismyipaddress.com/",
+    "http://ip.my-proxy.com/",
+    "http://websiteipaddress.com/WhatIsMyIp",
+    "http://getmyipaddress.org/",
+    "http://showmyipaddress.com/",
+    "http://www.my-ip-address.net/",
+    "http://myexternalip.com/raw",
+    "http://www.canyouseeme.org/",
+    "http://www.trackip.net/",
+    "http://myip.dnsdynamic.org/",
+    "http://icanhazip.com/",
+    "http://www.iplocation.net/",
+    "http://www.howtofindmyipaddress.com/",
+    "http://www.ipchicken.com/",
+    "http://whatsmyip.net/",
+    "http://www.ip-adress.com/",
+    "http://checkmyip.com/",
+    "http://www.tracemyip.org/",
+    "http://checkmyip.net/",
+    "http://www.lawrencegoetz.com/programs/ipinfo/",
+    "http://www.findmyip.co/",
+    "http://ip-lookup.net/",
+    "http://www.dslreports.com/whois",
+    "http://www.mon-ip.com/en/my-ip/",
+    "http://www.myip.ru",
+    "http://ipgoat.com/",
+    "http://www.myipnumber.com/my-ip-address.asp",
+    "http://www.whatsmyipaddress.net/",
+    "http://formyip.com/",
+    "https://check.torproject.org/",
+    "http://www.displaymyip.com/",
+    "http://www.bobborst.com/tools/whatsmyip/",
+    "http://www.geoiptool.com/",
+    "https://www.whatsmydns.net/whats-my-ip-address.html",
+    "https://www.privateinternetaccess.com/pages/whats-my-ip/",
+    "http://checkip.dyndns.com/",
+    "http://myexternalip.com/",
+    "http://www.ip-adress.eu/",
+    "http://www.infosniper.net/",
+    "http://wtfismyip.com/",
+    "http://ipinfo.io/",
+    "http://httpbin.org/ip",
+]
 PATTERN_IPV4_SEG = r"(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)"
 PATTERN_IPV4 = ".".join([PATTERN_IPV4_SEG] * 4)
 
@@ -39,8 +87,8 @@ class AddressNotFoundError(ValueError):
         super().__init__(*args, **kwargs)
 
 
-class IPAddresses(object):
-    """Use for store our outer v4 and v6 addresses
+class IPAddress(object):
+    """Use for store our external v4 and v6 addresses
     """
 
     DEFAULT_IPV4_ADDRESS = IPv4Address("0.0.0.0")
@@ -85,6 +133,15 @@ class IPAddresses(object):
 class IPGetter(object):
     def __init__(self, urls: List[str] = DEFAULT_URLS):
         self._urls = urls
+        self._timeout = 30
+
+    @property
+    def timeout(self):
+        return self._timeout
+
+    @timeout.setter
+    def timeout(self, value):
+        self._timeout = value
 
     def get_from(self, url: str):
         """Gets your IP from a specific server
@@ -102,9 +159,15 @@ class IPGetter(object):
         )
         # Request raise timeout on connection or read operation after 30s if not
         # received any data
-        r = requests.get(
-            url, verify=False, headers={"user-agent": user_agent}, timeout=30
-        )
+        params = {
+            "url": url,
+            "verify": False,
+            "headers": {"user-agent": user_agent},
+        }
+
+        if self.timeout:
+            params["timeout"] = self.timeout
+        r = requests.get(**params)
 
         # Guess context with correct encoding
         guessed = chardet.detect(r.content)
@@ -138,7 +201,48 @@ class IPGetter(object):
                 "Not found any valid IP address at server : %s" % url
             )
 
-        return IPAddresses(v4, v6)
+        return IPAddress(v4, v6)
+
+    def get(self):
+        """Get the external IP address from servers.
+
+        This method will pick 3 random server from list and then request IP
+        address from them. If there have 2 servers have the same IP address,
+        we will return it, otherwise raise an exception"""
+
+        # 2 for checking, 1 more for backup if there have any server do not
+        # repsond
+        pick_count = 3
+        if len(self._urls) < pick_count:
+            pick_count = len(self._urls)
+
+        urls = random.choices(self._urls, k=pick_count)
+        addresses = []
+        for url in urls:
+            try:
+                address = self.get_from(url)
+            except (AddressNotFoundError, ConnectionError) as e:
+                addresses.append((None, url, e))
+                continue
+
+            for check_address, check_url, _ in addresses:
+                if address and (
+                    address.v4 == check_address.v4
+                    or address.v6 == check_address.v6
+                ):
+                    return address
+
+            addresses.append((address, url, None))
+
+        # If there have only one valid address in list, we should return it
+        if (len(urls) <= 1) and (len(addresses) == 1):
+            address, url, _ = addresses[0]
+            if address is not None:
+                return address
+
+        raise AddressNotFoundError(
+            "Can't found any valid IP address : %s" % addresses
+        )
 
     def test(self):
         """abc"""

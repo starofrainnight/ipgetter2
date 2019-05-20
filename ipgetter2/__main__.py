@@ -4,7 +4,7 @@
 """Console script for ipgetter2."""
 
 import click
-from .ipgetter2 import IPGetter, IPAddresses
+from .ipgetter2 import IPGetter, IPAddress
 
 
 @click.command()
@@ -12,7 +12,7 @@ def main():
     """Console script for ipgetter2."""
 
     getter = IPGetter()
-    click.echo(getter.get_from("http://checkip.dyndns.com/"))
+    click.echo(getter.get())
 
 
 if __name__ == "__main__":
