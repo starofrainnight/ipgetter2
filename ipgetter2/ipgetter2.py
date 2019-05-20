@@ -185,7 +185,7 @@ class IPGetter(object):
         if matched is not None:
             try:
                 v6 = ip_address(matched.group(0))
-            except AddressValueError:
+            except (AddressValueError, ValueError):
                 pass
 
         v4 = None
@@ -193,7 +193,7 @@ class IPGetter(object):
         if matched is not None:
             try:
                 v4 = ip_address(matched.group(0))
-            except AddressValueError:
+            except (AddressValueError, ValueError):
                 pass
 
         if v4 and v6:
