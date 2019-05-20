@@ -33,9 +33,24 @@ So I write this library with same API interface for my projects that depends on 
 Usage
 ---------
 
+* ipgetter2 usage
+
 ::
 
-    >>> import ipgetter
+    >>> from ipgetter2 import IPGetter
+    >>> getter = IPGetter()
+    >>> getter.get()
+    {v4:"8.8.8.8", v6:"::"}
+    >>> getter.get_from("http://checkip.dyndns.org/plain")
+    {v4:"8.8.8.8", v6:"::"}
+    >>> getter.test()
+
+
+* Emulated API interface of ipgetter library
+
+::
+
+    >>> from ipgetter2 import ipgetter1 as ipgetter
     >>> myip = ipgetter.myip()
     >>> myip
     '8.8.8.8'
