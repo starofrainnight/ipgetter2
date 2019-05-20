@@ -9,7 +9,7 @@ from .ipgetter2 import IPGetter, IPAddress
 
 @click.command()
 def main():
-    """Console script for ipgetter2."""
+    """Simple script to get the external ip"""
 
     getter = IPGetter()
     click.echo(getter.get())
