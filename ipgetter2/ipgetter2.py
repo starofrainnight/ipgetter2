@@ -114,6 +114,9 @@ class IPAddress(object):
     def is_valid(self):
         return bool(self.v4 or self.v6)
 
+    def __hash__(self):
+        return hash(tuple([self.v4, self.v6]))
+
     def __repr__(self):
         return '%s(v4="%s", v6="%s")' % (
             self.__class__.__name__,
