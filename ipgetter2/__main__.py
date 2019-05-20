@@ -51,7 +51,7 @@ def test():
 
             failed.append(url)
 
-    click.echo("Total urls : %s" % (len(DEFAULT_URLS), DEFAULT_URLS))
+    click.echo("Total urls : %s" % len(DEFAULT_URLS))
     click.echo("Failed %s urls : %s" % (len(failed), failed))
 
     click.echo(counted)
