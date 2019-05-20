@@ -4,14 +4,15 @@
 """Console script for ipgetter2."""
 
 import click
-from .ipgetter1 import myip, IPgetter
+from .ipgetter2 import IPGetter, IPAddress
 
 
 @click.command()
 def main():
     """Console script for ipgetter2."""
 
-    click.echo(myip())
+    getter = IPGetter()
+    click.echo(getter.get_from("http://checkip.dyndns.com/"))
 
 
 if __name__ == "__main__":

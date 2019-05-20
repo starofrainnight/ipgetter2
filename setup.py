@@ -13,10 +13,7 @@ with io.open("README.rst", encoding="utf-8") as readme_file, io.open(
 
 install_requires = ["click>=6.0"]
 
-setup_requires = [
-    "pytest-runner",
-    # TODO(starofrainnight): put setup requirements (distutils extensions, etc.) here
-]
+setup_requires = ["pytest-runner", "requests", "chardet"]
 
 tests_requires = [
     "pytest",
