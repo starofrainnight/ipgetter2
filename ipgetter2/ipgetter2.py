@@ -10,6 +10,7 @@ import random
 from requests.exceptions import ReadTimeout
 from ipaddress import ip_address, IPv4Address, IPv6Address, AddressValueError
 from typing import List
+from .exceptions import AddressNotFoundError
 
 DEFAULT_URLS = [
     "http://ip.dnsexit.com",
@@ -81,11 +82,6 @@ PATTERN_IPV6 = (
     r"({ipv6_seg}:){{1,4}}:{ipv4}"  # 2001:db8:3:4::192.0.2.33  64:ff9b::192.0.2.33 (IPv4-Embedded IPv6 Address)
     r")"
 ).format(ipv6_seg=PATTERN_IPV6_SEG, ipv4=PATTERN_IPV4)
-
-
-class AddressNotFoundError(ValueError):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
 
 
 class IPAddress(object):
