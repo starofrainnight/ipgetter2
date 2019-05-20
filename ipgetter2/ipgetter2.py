@@ -244,7 +244,3 @@ class IPGetter(object):
             "Can't found any valid IP address : %s" % addresses
         )
 
-    def test(self):
-        """abc"""
-
-        pass
