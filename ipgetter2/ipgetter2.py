@@ -64,22 +64,38 @@ DEFAULT_URLS = [
 PATTERN_IPV4_SEG = r"(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)"
 PATTERN_IPV4 = ".".join([PATTERN_IPV4_SEG] * 4)
 
-# References to : https://stackoverflow.com/questions/53497/regular-expression-that-matches-valid-ipv6-addresses
+# References to :
+# https://stackoverflow.com/questions/53497/regular-expression-that-matches-valid-ipv6-addresses
 PATTERN_IPV6_SEG = r"[0-9a-fA-F]{1,4}"
 PATTERN_IPV6 = (
     r"("
-    r"({ipv6_seg}:){{7,7}}{ipv6_seg}|"  # 1:2:3:4:5:6:7:8
-    r"({ipv6_seg}:){{1,7}}:|"  # 1::                                 1:2:3:4:5:6:7::
-    r"({ipv6_seg}:){{1,6}}:{ipv6_seg}|"  # 1::8               1:2:3:4:5:6::8   1:2:3:4:5:6::8
-    r"({ipv6_seg}:){{1,5}}(:{ipv6_seg}){{1,2}}|"  # 1::7:8             1:2:3:4:5::7:8   1:2:3:4:5::8
-    r"({ipv6_seg}:){{1,4}}(:{ipv6_seg}){{1,3}}|"  # 1::6:7:8           1:2:3:4::6:7:8   1:2:3:4::8
-    r"({ipv6_seg}:){{1,3}}(:{ipv6_seg}){{1,4}}|"  # 1::5:6:7:8         1:2:3::5:6:7:8   1:2:3::8
-    r"({ipv6_seg}:){{1,2}}(:{ipv6_seg}){{1,5}}|"  # 1::4:5:6:7:8       1:2::4:5:6:7:8   1:2::8
-    r"{ipv6_seg}:((:{ipv6_seg}){{1,6}})|"  # 1::3:4:5:6:7:8     1::3:4:5:6:7:8   1::8
-    r":((:{ipv6_seg}){{1,7}}|:)|"  # ::2:3:4:5:6:7:8    ::2:3:4:5:6:7:8  ::8       ::
-    r"fe80:(:{ipv6_seg}){{0,4}}%[0-9a-zA-Z]{{1,}}|"  # fe80::7:8%eth0     fe80::7:8%1  (link-local IPv6 addresses with zone index)
-    r"::(ffff(:0{{1,4}}){{0,1}}:){{0,1}}{ipv4}|"  # ::255.255.255.255  ::ffff:255.255.255.255  ::ffff:0:255.255.255.255 (IPv4-mapped IPv6 addresses and IPv4-translated addresses)
-    r"({ipv6_seg}:){{1,4}}:{ipv4}"  # 2001:db8:3:4::192.0.2.33  64:ff9b::192.0.2.33 (IPv4-Embedded IPv6 Address)
+    # 1:2:3:4:5:6:7:8
+    r"({ipv6_seg}:){{7,7}}{ipv6_seg}|"
+    # 1::                                 1:2:3:4:5:6:7::
+    r"({ipv6_seg}:){{1,7}}:|"
+    # 1::8               1:2:3:4:5:6::8   1:2:3:4:5:6::8
+    r"({ipv6_seg}:){{1,6}}:{ipv6_seg}|"
+    # 1::7:8             1:2:3:4:5::7:8   1:2:3:4:5::8
+    r"({ipv6_seg}:){{1,5}}(:{ipv6_seg}){{1,2}}|"
+    # 1::6:7:8           1:2:3:4::6:7:8   1:2:3:4::8
+    r"({ipv6_seg}:){{1,4}}(:{ipv6_seg}){{1,3}}|"
+    # 1::5:6:7:8         1:2:3::5:6:7:8   1:2:3::8
+    r"({ipv6_seg}:){{1,3}}(:{ipv6_seg}){{1,4}}|"
+    # 1::4:5:6:7:8       1:2::4:5:6:7:8   1:2::8
+    r"({ipv6_seg}:){{1,2}}(:{ipv6_seg}){{1,5}}|"
+    # 1::3:4:5:6:7:8     1::3:4:5:6:7:8   1::8
+    r"{ipv6_seg}:((:{ipv6_seg}){{1,6}})|"
+    # ::2:3:4:5:6:7:8    ::2:3:4:5:6:7:8  ::8       ::
+    r":((:{ipv6_seg}){{1,7}}|:)|"
+    # fe80::7:8%eth0     fe80::7:8%1  (link-local IPv6 addresses with zone
+    # index)
+    r"fe80:(:{ipv6_seg}){{0,4}}%[0-9a-zA-Z]{{1,}}|"
+    # ::255.255.255.255  ::ffff:255.255.255.255  ::ffff:0:255.255.255.255 (
+    # IPv4-mapped IPv6 addresses and IPv4-translated addresses)
+    r"::(ffff(:0{{1,4}}){{0,1}}:){{0,1}}{ipv4}|"
+    # 2001:db8:3:4::192.0.2.33  64:ff9b::192.0.2.33 (IPv4-Embedded IPv6
+    # Address)
+    r"({ipv6_seg}:){{1,4}}:{ipv4}"
     r")"
 ).format(ipv6_seg=PATTERN_IPV6_SEG, ipv4=PATTERN_IPV4)
 
@@ -162,8 +178,8 @@ class IPGetter(object):
                 "Safari/537.36",
             ]
         )
-        # Request raise timeout on connection or read operation after 30s if not
-        # received any data
+        # Request raise timeout on connection or read operation after 30s if
+        # not received any data
         r = requests.get(
             url,
             verify=False,
@@ -245,4 +261,3 @@ class IPGetter(object):
         raise AddressNotFoundError(
             "Can't found any valid IP address : %s" % addresses
         )
-

@@ -4,7 +4,7 @@
 """Console script for ipgetter2."""
 
 import click
-from .ipgetter2 import IPGetter, IPAddress, DEFAULT_URLS
+from .ipgetter2 import IPGetter, DEFAULT_URLS
 
 
 @click.group()
