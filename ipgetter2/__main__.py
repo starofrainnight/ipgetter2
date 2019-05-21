@@ -22,6 +22,15 @@ def get():
 
 
 @main.command()
+@click.argument("url")
+def get_from(url):
+    """Get the external IP from specific server"""
+
+    getter = IPGetter()
+    click.echo(getter.get_from(url))
+
+
+@main.command()
 def test():
     """Test default servers"""
 
