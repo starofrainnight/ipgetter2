@@ -3,11 +3,8 @@
 
 """Tests for `ipgetter2` package."""
 
-import pytest
-
 from click.testing import CliRunner
 
-from ipgetter2 import ipgetter2, IPGetter
 from ipgetter2.__main__ import main
 
 
@@ -21,4 +18,3 @@ def test_command_line_interface():
     help_result = runner.invoke(main, ["--help"])
     assert help_result.exit_code == 0
     assert "--help  Show this message and exit." in help_result.output
-
