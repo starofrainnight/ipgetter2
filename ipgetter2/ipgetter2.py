@@ -59,6 +59,7 @@ DEFAULT_URLS = [
     "http://wtfismyip.com/",
     "http://ipinfo.io/",
     "http://httpbin.org/ip",
+    "https://api.myip.com",
 ]
 PATTERN_IPV4_SEG = r"(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)"
 PATTERN_IPV4 = ".".join([PATTERN_IPV4_SEG] * 4)
@@ -130,7 +131,7 @@ class IPAddress(object):
 
 
 class IPGetter(object):
-    def __init__(self, urls: List[str] = DEFAULT_URLS):
+    def __init__(self, urls: List[str] = DEFAULT_URLS) -> None:
         """Initialize the IPGetter object with specific server urls
 
         :param urls: Servers' url that provided ability to get an external IP,
@@ -163,15 +164,12 @@ class IPGetter(object):
         )
         # Request raise timeout on connection or read operation after 30s if not
         # received any data
-        params = {
-            "url": url,
-            "verify": False,
-            "headers": {"user-agent": user_agent},
-        }
-
-        if self.timeout:
-            params["timeout"] = self.timeout
-        r = requests.get(**params)
+        r = requests.get(
+            url,
+            verify=False,
+            timeout=self.timeout,
+            headers={"user-agent": user_agent},
+        )
 
         # Guess context with correct encoding
         guessed = chardet.detect(r.content)
