@@ -31,7 +31,7 @@ def test():
     counted = dict()
 
     i = 0
-    click.echo("%s servers needs to be tested : " % len(DEFAULT_URLS))
+    click.echo("Numbers of Servers : %s" % len(DEFAULT_URLS))
     for url in DEFAULT_URLS:
         i += 1
 
@@ -51,11 +51,13 @@ def test():
 
             failed.append(url)
 
-    click.echo("Total urls : %s" % len(DEFAULT_URLS))
-    click.echo("Failed %s urls : %s" % (len(failed), failed))
+    click.echo("%s server failed : %s" % (len(failed), failed))
 
     click.echo(counted)
-    click.echo(max(counted.items(), lambda item: item[1]))
+    max_occur_addr = max(counted.items(), key=lambda item: item[1])
+    click.echo(
+        "IP's : %s = %s ocurrencies" % (max_occur_addr[0], max_occur_addr[1])
+    )
 
 
 @main.command()
