@@ -56,7 +56,6 @@ Usage
     {IPAddress(v4="59.38.62.172", v6="::"): 17, IPAddress(v4="0.0.0.0", v6="::"): 22, IPAddress(v4="0.0.0.0", v6="::ffff:3b26:3eac"): 1, IPAddress(v4="0.0.0.0", v6="::bef"): 1}
     IP's : {v4:"0.0.0.0", v6:"::"} = 22 ocurrencies
 
-
 * Emulated API interface of ipgetter library
 
 ::
