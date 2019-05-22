@@ -62,31 +62,13 @@ DEFAULT_URLS = [
     "https://api.myip.com",
 ]
 PATTERN_IPV4_SEG = r"(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)"
-PATTERN_IPV4 = ".".join([PATTERN_IPV4_SEG] * 4)
+PATTERN_IPV4 = r"\.".join([PATTERN_IPV4_SEG] * 4)
 
 # References to :
 # https://stackoverflow.com/questions/53497/regular-expression-that-matches-valid-ipv6-addresses
 PATTERN_IPV6_SEG = r"[0-9a-fA-F]{1,4}"
 PATTERN_IPV6 = (
     r"("
-    # 1:2:3:4:5:6:7:8
-    r"({ipv6_seg}:){{7,7}}{ipv6_seg}|"
-    # 1::                                 1:2:3:4:5:6:7::
-    r"({ipv6_seg}:){{1,7}}:|"
-    # 1::8               1:2:3:4:5:6::8   1:2:3:4:5:6::8
-    r"({ipv6_seg}:){{1,6}}:{ipv6_seg}|"
-    # 1::7:8             1:2:3:4:5::7:8   1:2:3:4:5::8
-    r"({ipv6_seg}:){{1,5}}(:{ipv6_seg}){{1,2}}|"
-    # 1::6:7:8           1:2:3:4::6:7:8   1:2:3:4::8
-    r"({ipv6_seg}:){{1,4}}(:{ipv6_seg}){{1,3}}|"
-    # 1::5:6:7:8         1:2:3::5:6:7:8   1:2:3::8
-    r"({ipv6_seg}:){{1,3}}(:{ipv6_seg}){{1,4}}|"
-    # 1::4:5:6:7:8       1:2::4:5:6:7:8   1:2::8
-    r"({ipv6_seg}:){{1,2}}(:{ipv6_seg}){{1,5}}|"
-    # 1::3:4:5:6:7:8     1::3:4:5:6:7:8   1::8
-    r"{ipv6_seg}:((:{ipv6_seg}){{1,6}})|"
-    # ::2:3:4:5:6:7:8    ::2:3:4:5:6:7:8  ::8       ::
-    r":((:{ipv6_seg}){{1,7}}|:)|"
     # fe80::7:8%eth0     fe80::7:8%1  (link-local IPv6 addresses with zone
     # index)
     r"fe80:(:{ipv6_seg}){{0,4}}%[0-9a-zA-Z]{{1,}}|"
@@ -95,7 +77,25 @@ PATTERN_IPV6 = (
     r"::(ffff(:0{{1,4}}){{0,1}}:){{0,1}}{ipv4}|"
     # 2001:db8:3:4::192.0.2.33  64:ff9b::192.0.2.33 (IPv4-Embedded IPv6
     # Address)
-    r"({ipv6_seg}:){{1,4}}:{ipv4}"
+    r"({ipv6_seg}:){{1,4}}:{ipv4}|"
+    # ::2:3:4:5:6:7:8    ::2:3:4:5:6:7:8  ::8       ::
+    r":((:{ipv6_seg}){{1,7}}|:)|"
+    # 1::3:4:5:6:7:8     1::3:4:5:6:7:8   1::8
+    r"{ipv6_seg}:((:{ipv6_seg}){{1,6}})|"
+    # 1::4:5:6:7:8       1:2::4:5:6:7:8   1:2::8
+    r"({ipv6_seg}:){{1,2}}(:{ipv6_seg}){{1,5}}|"
+    # 1::5:6:7:8         1:2:3::5:6:7:8   1:2:3::8
+    r"({ipv6_seg}:){{1,3}}(:{ipv6_seg}){{1,4}}|"
+    # 1::6:7:8           1:2:3:4::6:7:8   1:2:3:4::8
+    r"({ipv6_seg}:){{1,4}}(:{ipv6_seg}){{1,3}}|"
+    # 1::7:8             1:2:3:4:5::7:8   1:2:3:4:5::8
+    r"({ipv6_seg}:){{1,5}}(:{ipv6_seg}){{1,2}}|"
+    # 1::8               1:2:3:4:5:6::8   1:2:3:4:5:6::8
+    r"({ipv6_seg}:){{1,6}}:{ipv6_seg}|"
+    # 1:2:3:4:5:6:7:8
+    r"({ipv6_seg}:){{7,7}}{ipv6_seg}|"
+    # 1::                                 1:2:3:4:5:6:7::
+    r"({ipv6_seg}:){{1,7}}:"
     r")"
 ).format(ipv6_seg=PATTERN_IPV6_SEG, ipv4=PATTERN_IPV4)
 
@@ -127,7 +127,10 @@ class IPAddress(object):
         return self._v6
 
     def is_valid(self):
-        return bool(self.v4 or self.v6)
+        return bool(self.v4 or self.v6) and (
+            (self._v4 != self.DEFAULT_IPV4_ADDRESS)
+            or (self._v6 != self.DEFAULT_IPV6_ADDRESS)
+        )
 
     def __hash__(self):
         return hash((self.v4, self.v6))
@@ -227,7 +230,6 @@ class IPGetter(object):
         This method will pick 3 random server from list and then request IP
         address from them. If there have 2 servers have the same IP address,
         we will return it, otherwise raise an exception"""
-
         # 2 for checking, 1 more for backup if there have any server do not
         # repsond
         pick_count = 3
@@ -240,10 +242,12 @@ class IPGetter(object):
             try:
                 address = self.get_from(url)
             except (AddressNotFoundError, ConnectionError, ReadTimeout) as e:
-                addresses.append((None, url, e))
                 continue
 
             for check_address, check_url, _ in addresses:
+                if not address.is_valid():
+                    continue
+
                 if address and (
                     address.v4 == check_address.v4
                     or address.v6 == check_address.v6
@@ -253,9 +257,8 @@ class IPGetter(object):
             addresses.append((address, url, None))
 
         # If there have only one valid address in list, we should return it
-        if (len(urls) <= 1) and (len(addresses) == 1):
-            address, url, _ = addresses[0]
-            if address is not None:
+        for address in addresses:
+            if address.is_valid():
                 return address
 
         raise AddressNotFoundError(
