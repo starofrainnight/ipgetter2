@@ -241,10 +241,10 @@ class IPGetter(object):
         for url in urls:
             try:
                 address = self.get_from(url)
-            except (AddressNotFoundError, ConnectionError, ReadTimeout) as e:
+            except (AddressNotFoundError, ConnectionError, ReadTimeout):
                 continue
 
-            for check_address, check_url, _ in addresses:
+            for check_address, check_url in addresses:
                 if not address.is_valid():
                     continue
 
@@ -254,10 +254,10 @@ class IPGetter(object):
                 ):
                     return address
 
-            addresses.append((address, url, None))
+            addresses.append((address, url))
 
         # If there have only one valid address in list, we should return it
-        for address in addresses:
+        for address, url in addresses:
             if address.is_valid():
                 return address
 
