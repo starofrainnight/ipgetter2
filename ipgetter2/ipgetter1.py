@@ -53,12 +53,12 @@ class IPgetter(object):
     def get_externalip(self):
         """This function gets your IP from a random server
         """
-        return self._getter.get().v4
+        return str(self._getter.get().v4)
 
     def fetch(self, server):
         """This function gets your IP from a specific server
         """
-        return self._getter.get_from(server).v4
+        return str(self._getter.get_from(server).v4)
 
     def test(self):
         """This functions tests the consistency of the servers
