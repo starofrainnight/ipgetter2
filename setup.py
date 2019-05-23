@@ -22,7 +22,7 @@ tests_requires = [
 
 setup(
     name="ipgetter2",
-    version="1.1.3",
+    version="1.1.4",
     description="Utility to fetch your external IP address",
     long_description=long_description,
     author="Hong-She Liang",
