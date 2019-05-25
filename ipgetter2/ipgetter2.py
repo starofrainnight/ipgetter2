@@ -244,8 +244,8 @@ class IPGetter(object):
         """Get your IP from servers
         """
 
-        addresses: List[Tuple[IPAddress, str]] = []
-        queue: Queue = Queue()
+        addresses = []  # type: List[Tuple[IPAddress, str]]
+        queue = Queue()  # type: Queue
 
         def fetch_address_thread(queue, url):
             try:
