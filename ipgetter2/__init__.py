@@ -4,6 +4,6 @@
 
 __author__ = """Hong-She Liang"""
 __email__ = "starofrainnight@gmail.com"
-__version__ = "1.1.7"
+__version__ = "1.1.8"
 
 from .ipgetter2 import IPGetter  # noqa
