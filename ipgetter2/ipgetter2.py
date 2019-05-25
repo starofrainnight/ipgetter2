@@ -7,7 +7,10 @@ import chardet
 import requests
 import unicodedata
 import random
-from requests.exceptions import ReadTimeout
+import time
+from threading import Thread
+from queue import Queue, Empty
+from requests.exceptions import ReadTimeout, ConnectionError
 from ipaddress import ip_address, IPv4Address, IPv6Address, AddressValueError
 from typing import List
 from .exceptions import AddressNotFoundError
@@ -184,10 +187,7 @@ class IPGetter(object):
         # Request raise timeout on connection or read operation after 30s if
         # not received any data
         r = requests.get(
-            url,
-            verify=False,
-            timeout=self.timeout,
-            headers={"user-agent": user_agent},
+            url, timeout=self.timeout, headers={"user-agent": user_agent}
         )
 
         # Guess context with correct encoding
@@ -238,16 +238,28 @@ class IPGetter(object):
 
         urls = random.choices(self._urls, k=pick_count)
         addresses = []
-        for url in urls:
+        queue = Queue()
+
+        def fetch_address_thread(queue, url):
             try:
                 address = self.get_from(url)
+                queue.put((address, url))
             except (AddressNotFoundError, ConnectionError, ReadTimeout):
+                queue.put((None, url))
+
+        for url in urls:
+            thread = Thread(
+                target=fetch_address_thread, args=(queue, url), daemon=True
+            )
+            thread.start()
+
+        for i in range(pick_count):
+            address, url = queue.get()
+
+            if (not address) or (not address.is_valid()):
                 continue
 
-            for check_address, check_url in addresses:
-                if not address.is_valid():
-                    continue
-
+            for check_address, _ in addresses:
                 if address and (
                     address.v4 == check_address.v4
                     or address.v6 == check_address.v6
