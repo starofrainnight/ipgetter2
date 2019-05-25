@@ -11,7 +11,7 @@ from threading import Thread
 from queue import Queue
 from requests.exceptions import ReadTimeout, ConnectionError
 from ipaddress import ip_address, IPv4Address, IPv6Address, AddressValueError
-from typing import List
+from typing import List, Tuple
 from .exceptions import AddressNotFoundError
 
 # Default Servers' URL
@@ -223,21 +223,12 @@ class IPGetter(object):
 
         return IPAddress(v4, v6)
 
-    def get(self):
-        """Get the external IP address from servers.
+    def get_from_batch(self, urls: List[str]):
+        """Get your IP from servers
+        """
 
-        This method will pick 3 random server from list and then request IP
-        address from them. If there have 2 servers have the same IP address,
-        we will return it, otherwise raise an exception"""
-        # 2 for checking, 1 more for backup if there have any server do not
-        # repsond
-        pick_count = 3
-        if len(self._urls) < pick_count:
-            pick_count = len(self._urls)
-
-        urls = random.choices(self._urls, k=pick_count)
-        addresses = []
-        queue = Queue()
+        addresses: List[Tuple[IPAddress, str]] = []
+        queue: Queue = Queue()
 
         def fetch_address_thread(queue, url):
             try:
@@ -252,7 +243,7 @@ class IPGetter(object):
             )
             thread.start()
 
-        for i in range(pick_count):
+        for i in range(len(urls)):
             address, url = queue.get()
 
             if (not address) or (not address.is_valid()):
@@ -275,3 +266,29 @@ class IPGetter(object):
         raise AddressNotFoundError(
             "Can't found any valid IP address : %s" % addresses
         )
+
+    def get(self):
+        """Get the external IP address from servers.
+
+        This method will pick 3 random server from list and then request IP
+        address from them. If there have 2 servers have the same IP address,
+        we will return it, otherwise we will try to find another 3 random
+        server and do the procedure above again until there no servers left
+        and raise an AddressNotFoundError exception."""
+        # 2 for checking, 1 more for backup if there have any server do not
+        # repsond
+        batch_size = 3
+
+        rest_urls = set(self._urls)
+        while True:
+            if len(rest_urls) < batch_size:
+                batch_size = len(rest_urls)
+
+            urls = random.choices(list(rest_urls), k=batch_size)
+            rest_urls -= set(urls)
+            try:
+                address = self.get_from_batch(urls)
+                return address
+            except AddressNotFoundError:
+                if len(rest_urls) <= 0:
+                    raise
