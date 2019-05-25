@@ -7,9 +7,8 @@ import chardet
 import requests
 import unicodedata
 import random
-import time
 from threading import Thread
-from queue import Queue, Empty
+from queue import Queue
 from requests.exceptions import ReadTimeout, ConnectionError
 from ipaddress import ip_address, IPv4Address, IPv6Address, AddressValueError
 from typing import List
