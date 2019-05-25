@@ -55,14 +55,13 @@ Usage
     Numbers of Servers : 46
     [1/46] Testing : http://ip.dnsexit.com
     [2/46] Testing : http://ifconfig.me/ip
-    …………
+    [3/46] Testing : http://ipecho.net/plain
+    ......
     [45/46] Testing : http://httpbin.org/ip
     [46/46] Testing : https://api.myip.com
-    /usr/lib/python3/dist-packages/urllib3/connectionpool.py:860: InsecureRequestWarning: Unverified HTTPS request is being made. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#ssl-warnings
-    InsecureRequestWarning)
-    5 server failed : ['http://checkip.dyndns.org/plain', 'http://ip-lookup.net/', 'https://check.torproject.org/', 'https://www.privateinternetaccess.com/pages/whats-my-ip/', 'http://myexternalip.com/']
-    {IPAddress(v4="59.38.62.172", v6="::"): 17, IPAddress(v4="0.0.0.0", v6="::"): 22, IPAddress(v4="0.0.0.0", v6="::ffff:3b26:3eac"): 1, IPAddress(v4="0.0.0.0", v6="::bef"): 1}
-    IP's : {v4:"0.0.0.0", v6:"::"} = 22 ocurrencies
+    8 server failed : ['http://checkip.dyndns.org/plain', 'http://www.canyouseeme.org/', 'http://whatsmyip.net/', 'http://www.ip-adress.com/', 'http://ip-lookup.net/', 'https://check.torproject.org/', 'https://www.privateinternetaccess.com/pages/whats-my-ip/', 'http://myexternalip.com/']
+    {IPAddress(v4="117.117.117.117", v6="::"): 26, IPAddress(v4="0.0.0.0", v6="::"): 11, IPAddress(v4="117.117.117.116", v6="::"): 1}
+    IP's : {v4:"117.117.117.117", v6:"::"} = 26 ocurrencies
 
 * Emulated API interface of ipgetter library
 
