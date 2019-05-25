@@ -30,6 +30,14 @@ I found ipgetter disappeared at night of 2019-05-11. I don't know precisely when
 
 So I write this library with same API interface for my projects that depends on it as a replacement, hope it will help people that ran into  the same situation.
 
+Features
+---------
+
+* Correctly detect webpage encoding by chardet
+* Control the timeout by library `requests` not by signal alarm (Alarm signal will cause problems)
+* Smart server fetch algorithm, the get() method will fetch at least 2 IP with the same value in 3 random servers (return the only one valid IP without checking if there have only one server responsed)
+* Support IPv6 either (Return both values if the server provided two of them)
+
 Usage
 ---------
 
