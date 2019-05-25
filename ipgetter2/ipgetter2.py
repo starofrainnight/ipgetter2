@@ -62,6 +62,16 @@ DEFAULT_URLS = [
     "http://ipinfo.io/",
     "http://httpbin.org/ip",
     "https://api.myip.com",
+    "http://api.ipify.org/",
+    # China servers
+    "http://ip.cn",
+    "http://ip.3322.net/",
+    "http://ip.qaros.com/",
+    "http://www.cip.cc/",
+    "https://haoip.cn/",
+    "https://api.ip.sb/ip",
+    "http://myip.ipip.net/",
+    "http://ip-addr.info/",
 ]
 PATTERN_IPV4_SEG = r"(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)"
 PATTERN_IPV4 = r"\.".join([PATTERN_IPV4_SEG] * 4)
