@@ -16,6 +16,7 @@ from .exceptions import AddressNotFoundError
 
 # Default Servers' URL
 DEFAULT_URLS = [
+    # Global Servers
     "http://ip.dnsexit.com",
     "http://ifconfig.me/ip",
     "http://ipecho.net/plain",
@@ -63,7 +64,8 @@ DEFAULT_URLS = [
     "http://httpbin.org/ip",
     "https://api.myip.com",
     "http://api.ipify.org/",
-    # China servers
+    "http://pv.sohu.com/cityjson",
+    # China Servers
     "http://ip.cn",
     "http://ip.3322.net/",
     "http://ip.qaros.com/",
@@ -72,6 +74,11 @@ DEFAULT_URLS = [
     "https://api.ip.sb/ip",
     "http://myip.ipip.net/",
     "http://ip-addr.info/",
+    "http://whois.pconline.com.cn/ipJson.jsp",
+    "http://ip.360.cn/IPShare/info",
+    "http://www.taobao.com/help/getip.php",
+    "http://2019.ip138.com/ic.asp",
+    "https://www.fbisb.com/ip.php",
 ]
 PATTERN_IPV4_SEG = r"(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)"
 PATTERN_IPV4 = r"\.".join([PATTERN_IPV4_SEG] * 4)
