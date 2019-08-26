@@ -6,13 +6,13 @@ import re
 import chardet
 import requests
 import unicodedata
-import random
 from threading import Thread
 from queue import Queue
 from requests.exceptions import ReadTimeout, ConnectionError
 from ipaddress import ip_address, IPv4Address, IPv6Address, AddressValueError
-from typing import List, Tuple
+from typing import List
 from .exceptions import AddressNotFoundError
+from .compatible import random_choices
 
 # Default Servers' URL
 DEFAULT_URLS = [
@@ -301,7 +301,7 @@ class IPGetter(object):
             if len(rest_urls) < batch_size:
                 batch_size = len(rest_urls)
 
-            urls = random.choices(list(rest_urls), k=batch_size)
+            urls = random_choices(list(rest_urls), k=batch_size)
             rest_urls -= set(urls)
             try:
                 address = self.get_from_batch(urls)
