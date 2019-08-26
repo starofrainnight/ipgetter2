@@ -10,7 +10,7 @@ from threading import Thread
 from queue import Queue
 from requests.exceptions import ReadTimeout, ConnectionError
 from ipaddress import ip_address, IPv4Address, IPv6Address, AddressValueError
-from typing import List
+from typing import List, Tuple
 from .exceptions import AddressNotFoundError
 from .compatible import random_choices
 
