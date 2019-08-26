@@ -40,7 +40,7 @@ def backport_random_choices(
     ]
 
 
-if sys.version_info <= (3, 5):
+if sys.version_info < (3, 6):
     import functools
 
     random_choices = functools.partial(backport_random_choices, random._inst)
