@@ -10,6 +10,9 @@ from . import ipgetter2
 
 def timeout(seconds, error_message="Function call timed out"):
     """Decorator that provides timeout to a function
+
+    It's not working on windows system! So maybe your function will freeze if
+    it's waiting a long run function.
     """
 
     def decorated(func):
@@ -18,20 +21,23 @@ def timeout(seconds, error_message="Function call timed out"):
 
         @wraps(func)
         def wrapper(*args, **kwargs):
-            if sys.platform.startswith("win32"):
+            if "alarm" in signal.__dict__:
+
+                signal_num = signal.SIGALRM
+                signal.signal(signal_num, _handle_timeout)
+                signal.alarm(seconds)
+                try:
+                    result = func(*args, **kwargs)
+                finally:
+                    signal.alarm(0)
+
+                return result
+            else:
                 # SIGALRM is not working in win32
                 # https://stackoverflow.com/questions/52779920/why-is-signal-sigalrm-not-working-in-python-on-windows
-                signal_num = signal.SIGINT
-            else:
-                signal_num = signal.SIGALRM
+                # https://stackoverflow.com/questions/47545002/python-standard-lib-signal-attributeerror-module-signal-has-no-attribute
 
-            signal.signal(signal_num, _handle_timeout)
-            signal.alarm(seconds)
-            try:
-                result = func(*args, **kwargs)
-            finally:
-                signal.alarm(0)
-            return result
+                return func(*args, **kwargs)
 
         return wrapper
 
