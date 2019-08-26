@@ -2,7 +2,6 @@
 
 """Original ipgetter interface simulate module."""
 
-import sys
 import signal
 from functools import wraps
 from . import ipgetter2
