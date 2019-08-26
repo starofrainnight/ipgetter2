@@ -2,6 +2,7 @@
 
 """Original ipgetter interface simulate module."""
 
+import sys
 import signal
 from functools import wraps
 from . import ipgetter2
@@ -17,7 +18,14 @@ def timeout(seconds, error_message="Function call timed out"):
 
         @wraps(func)
         def wrapper(*args, **kwargs):
-            signal.signal(signal.SIGALRM, _handle_timeout)
+            if sys.platform.startswith("win32"):
+                # SIGALRM is not working in win32
+                # https://stackoverflow.com/questions/52779920/why-is-signal-sigalrm-not-working-in-python-on-windows
+                signal_num = signal.SIGINT
+            else:
+                signal_num = signal.SIGALRM
+
+            signal.signal(signal_num, _handle_timeout)
             signal.alarm(seconds)
             try:
                 result = func(*args, **kwargs)
