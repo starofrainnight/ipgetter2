@@ -9,13 +9,13 @@ from .ipgetter2 import IPGetter, DEFAULT_URLS
 
 @click.group()
 def main():
-    """Simple script for get/test external IP"""
+    """Simple script for get/test external IP."""
     pass
 
 
 @main.command()
 def get():
-    """Get the external IP randomly from default servers"""
+    """Get the external IP randomly from default servers."""
 
     getter = IPGetter()
     click.echo(getter.get())
@@ -24,7 +24,7 @@ def get():
 @main.command()
 @click.argument("url")
 def get_from(url):
-    """Get the external IP from specific server"""
+    """Get the external IP from specific server."""
 
     getter = IPGetter()
     click.echo(getter.get_from(url))
@@ -32,7 +32,7 @@ def get_from(url):
 
 @main.command()
 def test():
-    """Test default servers"""
+    """Test default servers."""
 
     getter = IPGetter()
     contexts = []
@@ -71,7 +71,7 @@ def test():
 
 @main.command()
 def show_servers():
-    """Display default servers' urls"""
+    """Display default servers' URLs."""
 
     i = 0
     for url in DEFAULT_URLS:
