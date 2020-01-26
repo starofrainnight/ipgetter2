@@ -208,8 +208,14 @@ class IPGetter(object):
 
         # Guess context with correct encoding
         guessed = chardet.detect(r.content)
-        # Fixed Chinese encoding by latest standard
-        if guessed["encoding"].upper() == "GB2312":
+
+        if guessed["encoding"] is None:
+            # We got empty result (b'') from server?!
+            # Just set to default values, later it will raise AddressNotFoundError
+            guessed["encoding"] = "ascii"
+            guessed["language"] = ""
+        elif guessed["encoding"].upper() == "GB2312":
+            # Fixed Chinese encoding by latest standard
             guessed["encoding"] = "GB18030"
 
         text = r.content.decode(guessed["encoding"])
