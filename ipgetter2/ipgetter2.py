@@ -211,7 +211,8 @@ class IPGetter(object):
 
         if guessed["encoding"] is None:
             # We got empty result (b'') from server?!
-            # Just set to default values, later it will raise AddressNotFoundError
+            # Just set to default values, later it will raise
+            # AddressNotFoundError
             guessed["encoding"] = "ascii"
             guessed["language"] = ""
         elif guessed["encoding"].upper() == "GB2312":
