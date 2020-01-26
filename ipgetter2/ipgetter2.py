@@ -218,7 +218,7 @@ class IPGetter(object):
             # Fixed Chinese encoding by latest standard
             guessed["encoding"] = "GB18030"
 
-        text = r.content.decode(guessed["encoding"])
+        text = r.content.decode(str(guessed["encoding"]))
         # Normalize unicode text
         text = unicodedata.normalize("NFKC", text)
 
