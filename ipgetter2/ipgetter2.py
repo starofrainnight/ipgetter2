@@ -76,7 +76,6 @@ DEFAULT_URLS = [
     "http://ip-addr.info/",
     "http://whois.pconline.com.cn/ipJson.jsp",
     "http://ip.360.cn/IPShare/info",
-    "http://www.taobao.com/help/getip.php",
     "http://2019.ip138.com/ic.asp",
     "https://www.fbisb.com/ip.php",
 ]
