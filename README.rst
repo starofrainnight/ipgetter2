@@ -21,7 +21,6 @@ It picks your IP randomly from a server list to minimize request overhead on a s
 NOTICE: This library is try to act as a replacement of the **ipgetter** library, because that library has disappeared on pypi.org and github.
 
 * License: Apache-2.0
-* Documentation: https://ipgetter2.readthedocs.io.
 
 Why there another ipgetter library?
 -----------------------------------------
