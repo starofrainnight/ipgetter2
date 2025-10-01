@@ -4,12 +4,6 @@ ipgetter2
 .. image:: https://img.shields.io/pypi/v/ipgetter2.svg
     :target: https://pypi.python.org/pypi/ipgetter2
 
-.. image:: https://travis-ci.org/starofrainnight/ipgetter2.svg?branch=master
-    :target: https://travis-ci.org/starofrainnight/ipgetter2
-
-.. image:: https://ci.appveyor.com/api/projects/status/github/starofrainnight/ipgetter2?svg=true
-    :target: https://ci.appveyor.com/project/starofrainnight/ipgetter2
-
 Utility to fetch your external IP address.
 
 This module is designed to fetch your external IP address from the internet.

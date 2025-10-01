@@ -3,7 +3,7 @@ History
 =======
 
 1.1.10 (2020-01-26)
-------------------
+--------------------
 
 * Fixed AttributeError: 'NoneType' object has no attribute 'upper' when server 
   reponse an empty result

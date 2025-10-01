@@ -25,6 +25,7 @@ setup(
     version="1.1.12",
     description="Utility to fetch your external IP address",
     long_description=long_description,
+    long_description_content_type="text/x-rst",
     author="Hong-She Liang",
     author_email="starofrainnight@gmail.com",
     url="https://github.com/starofrainnight/ipgetter2",
