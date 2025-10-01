@@ -2,6 +2,12 @@
 History
 =======
 
+1.1.12 (2025-10-01)
+--------------------
+
+* Removed some broken urls
+* Fixed dns query failed might wait for a long time for continue
+
 1.1.10 (2020-01-26)
 --------------------
 
