@@ -4,7 +4,11 @@
 """Console script for ipgetter2."""
 
 import click
+import socket
 from .ipgetter2 import IPGetter, DEFAULT_URLS
+
+# Ensure dns timeout no more than 30s
+socket.setdefaulttimeout(30)
 
 
 @click.group()
