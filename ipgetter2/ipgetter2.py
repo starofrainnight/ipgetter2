@@ -22,8 +22,6 @@ DEFAULT_URLS = [
     "http://ipecho.net/plain",
     "http://checkip.dyndns.org/plain",
     "http://www.find-ip.net/",
-    "http://websiteipaddress.com/WhatIsMyIp",
-    "http://getmyipaddress.org/",
     "http://showmyipaddress.com/",
     "http://www.my-ip-address.net/",
     "https://www.my-ip-address.co/",
@@ -40,7 +38,6 @@ DEFAULT_URLS = [
     "http://www.tracemyip.org/",
     "http://checkmyip.net/",
     "http://www.lawrencegoetz.com/programs/ipinfo/",
-    "http://www.findmyip.co/",
     "http://ip-lookup.net/",
     "http://www.dslreports.com/whois",
     "http://www.mon-ip.com/en/my-ip/",
@@ -75,7 +72,6 @@ DEFAULT_URLS = [
     "http://myip.ipip.net/",
     "http://ip-addr.info/",
     "http://whois.pconline.com.cn/ipJson.jsp",
-    "http://ip.360.cn/IPShare/info",
     "http://2019.ip138.com/ic.asp",
     "https://www.fbisb.com/ip.php",
 ]
@@ -119,8 +115,7 @@ PATTERN_IPV6 = (
 
 
 class IPAddress(object):
-    """Use for store our external v4 and v6 addresses
-    """
+    """Use for store our external v4 and v6 addresses"""
 
     DEFAULT_IPV4_ADDRESS = IPv4Address("0.0.0.0")
     DEFAULT_IPV6_ADDRESS = IPv6Address("::")
@@ -186,8 +181,7 @@ class IPGetter(object):
         self._timeout = value
 
     def get_from(self, url: str):
-        """Gets your IP from a specific server
-        """
+        """Gets your IP from a specific server"""
 
         user_agent = " ".join(
             [
@@ -247,8 +241,7 @@ class IPGetter(object):
         return IPAddress(v4, v6)
 
     def get_from_batch(self, urls: List[str]):
-        """Get your IP from servers
-        """
+        """Get your IP from servers"""
 
         addresses = []  # type: List[Tuple[IPAddress, str]]
         queue = Queue()  # type: Queue
